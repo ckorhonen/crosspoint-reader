@@ -241,7 +241,8 @@ for i_start, i_end in intervals:
 
         # Build output data
         packed = bytes(pixels)
-        compressed = zlib.compress(packed)
+        # DEFLATE compressed data without zlib header/footer
+        compressed = zlib.compress(packed, wbits=-15)
         is_compressed = len(compressed) < len(packed) * 0.9
         # Use compressed data only if it's at least 10% smaller
         if is_compressed:

@@ -17,7 +17,7 @@ bool inflateOneShot(const uint8_t* inputBuf, const size_t deflatedSize, uint8_t*
   size_t inBytes = deflatedSize;
   size_t outBytes = inflatedSize;
   const tinfl_status status = tinfl_decompress(inflator, inputBuf, &inBytes, nullptr, outputBuf, &outBytes,
-                                               TINFL_FLAG_PARSE_ZLIB_HEADER | TINFL_FLAG_USING_NON_WRAPPING_OUTPUT_BUF);
+                                               TINFL_FLAG_USING_NON_WRAPPING_OUTPUT_BUF);
   free(inflator);
 
   if (status != TINFL_STATUS_DONE) {
