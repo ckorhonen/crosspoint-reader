@@ -93,6 +93,11 @@ class CrossPointSettings {
   // Long-press chapter skip on side buttons
   uint8_t longPressChapterSkip = 1;
 
+  // Calendar mode settings
+  uint8_t calendarModeEnabled = 0;      // 0 = disabled, 1 = enabled
+  uint8_t calendarRefreshHours = 4;     // Refresh interval in hours (1-24)
+  char calendarServerUrl[256] = "";     // URL to fetch BMP image from
+
   ~CrossPointSettings() = default;
 
   // Get singleton instance

@@ -6,6 +6,7 @@
 #include <SDCardManager.h>
 #include <SPI.h>
 #include <builtinFonts/all.h>
+#include <esp_sleep.h>
 
 #include <cstring>
 
@@ -21,6 +22,7 @@
 #include "activities/reader/ReaderActivity.h"
 #include "activities/settings/SettingsActivity.h"
 #include "activities/util/FullScreenMessageActivity.h"
+#include "activities/calendar/CalendarActivity.h"
 #include "fontIds.h"
 
 #define SPI_FQ 40000000
@@ -289,6 +291,16 @@ void setup() {
   }
 
   SETTINGS.loadFromFile();
+
+  // Check if this is a timer wake for calendar mode
+  esp_sleep_wakeup_cause_t wakeupCause = esp_sleep_get_wakeup_cause();
+  if (wakeupCause == ESP_SLEEP_WAKEUP_TIMER && SETTINGS.calendarModeEnabled) {
+    Serial.printf("[%lu] [   ] Timer wake detected - entering calendar mode\n", millis());
+    setupDisplayAndFonts();
+    exitActivity();
+    enterNewActivity(new CalendarActivity(renderer, mappedInputManager));
+    return;  // Skip normal boot flow
+  }
 
   // verify power button press duration after we've read settings.
   verifyWakeupLongPress();
